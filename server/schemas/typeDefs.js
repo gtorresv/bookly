@@ -8,24 +8,29 @@ const typeDefs = `
     }
 
     type Book {
-        bookId: book_id
+        bookId: String!
         authors: [String]!
         description: String
         title: String
-        // TODO: image and link
-        image: 
-        link: 
+        image: String
+        link: String
     }
 
     type Auth {
         token: ID!
         user: User
     }
-    // TODO: Query
 
-    // TODO: Mutation
+    type Query {
+        me: [User]
+    }
 
-    // TODO: Auth type 
+    type Mutation {
+        login(email: String!, password: String!): Auth 
+        addUser(username: String!, email: String!, password: String!): Auth
+        saveBook(book: BookInput!): User
+        removeBook(bookId: book_id): User
+    }
 `;
 
 module.exports = typeDefs;
