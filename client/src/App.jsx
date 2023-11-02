@@ -1,14 +1,44 @@
 import './App.css';
+// Adds the Apollo Provider
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 
+// Adds the main GraphQL API endpoint
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+// Attaches a JWT token to every authorization
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('id_token');
+  return {
+    headers: {
+      ...headers, 
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+// Sets up the Apollo Client
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
 function App() {
   return (
-    <>
+    <ApolloProvider client={client}>
       <Navbar />
       <Outlet />
-    </>
+    </ApolloProvider>
   );
 }
 
