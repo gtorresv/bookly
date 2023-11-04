@@ -15,12 +15,48 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (parent, { username }) => {
+    addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
+    login: async (parent, { username, email, password }) => {
+        const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+    if (!user) {
+      return new Error({ message: "Can't find this user" });
+    }
+
+    const correctPw = await user.isCorrectPassword(password);
+
+    if (!correctPw) {
+      return new Error({ message: 'Wrong password!' });
+    }
+    const token = signToken(user);
+    return { token, user };
+    }
   },
+  saveBook: async (parent, {BookInput}, context) => {
+    if(context.user) {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $addToSet: { savedBooks: BookInput } },
+            { new: true, runValidators: true }
+        );
+        return updatedUser
+    }
+    return new Error({ message: 'Not logged in!'});
+  }, 
+  removeBook: async (parent, {bookId}, context) => {
+    if (context.user) {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { savedBooks: { bookId: bookId } } },
+            { new: true }
+        );
+        return updatedUser  
+    }
+    return new Error({ message: 'Not logged in!' });
+  }
 };
 
 // finish resolvers
