@@ -77,7 +77,6 @@ const SearchBooks = () => {
     }
 
     try {
-      // TODO: Fix error
       await saveBook({
         variables: { bookInput: bookToSave },
       });

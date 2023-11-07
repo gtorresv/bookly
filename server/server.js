@@ -7,9 +7,6 @@ const { authMiddleware } = require('./utils/auth')
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
-// comment out this code after adding queries
-// const routes = require('./routes');
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
@@ -42,9 +39,6 @@ const startApolloServer = async () => {
       console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
     });
   });
-
-// comment out after adding graphql into client folder
-//app.use(routes);
 };
 
 startApolloServer();
