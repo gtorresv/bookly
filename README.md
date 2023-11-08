@@ -6,7 +6,7 @@ The Book Search Engine is a project that is designed to provide avid readers wit
 
 ## Usage
 
-You can use the application by entering the url: into your browser.
+You can use the application by entering the url: https://infinite-earth-83527-4f762336de57.herokuapp.com into your browser.
 
 ![Main Page](./assets/images/searchBookApp.png)
 
